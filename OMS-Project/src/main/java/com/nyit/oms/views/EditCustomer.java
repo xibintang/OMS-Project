@@ -34,35 +34,52 @@ public class EditCustomer extends JFrame{
     private JLabel labelCountry = new JLabel("Country");
     private JLabel labelPhoneNum = new JLabel("Phone Number");
     private JLabel labelFax = new JLabel("Fax");
-    private JButton updateButton = new JButton("Update");
+    private JButton insertButton = new JButton("Insert");
     private JButton cancelButton = new JButton("Cancel");
 
     private SqlSession sqlSession;
-    private List<Customer> customers;
+    private Customer updateCustomer;
 
 
     public EditCustomer() {
-        updateButton.addActionListener(new ActionListener() {
+        insertButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // open the session:
                 sqlSession = SqlSessionUtil.openSession();
-                // make a customer object:
-                Customer customer = new Customer(
-                        Integer.parseInt(customerID.getText()),
-                        companyName.getText(),
-                        contactName.getText(),
-                        contactTitle.getText(),
-                        address.getText(),
-                        city.getText(),
-                        region.getText(),
-                        Integer.parseInt(postalCode.getText()),
-                        country.getText(),
-                        Integer.parseInt(phoneNum.getText()),
-                        Integer.parseInt(fax.getText())
-                );
-                // insert into the table:
-                sqlSession.insert("customer.insertCustomer",customer);
+                if(updateCustomer != null){
+                    Customer newCust = new Customer(
+                            Integer.parseInt(customerID.getText()),
+                            companyName.getText(),
+                            contactName.getText(),
+                            contactTitle.getText(),
+                            address.getText(),
+                            city.getText(),
+                            region.getText(),
+                            Integer.parseInt(postalCode.getText()),
+                            country.getText(),
+                            Integer.parseInt(phoneNum.getText()),
+                            Integer.parseInt(fax.getText())
+                    );
+                    sqlSession.insert("customer.updateByID",newCust);
+                }else{
+                    // make a customer object:
+                    Customer customer = new Customer(
+                            Integer.parseInt(customerID.getText()),
+                            companyName.getText(),
+                            contactName.getText(),
+                            contactTitle.getText(),
+                            address.getText(),
+                            city.getText(),
+                            region.getText(),
+                            Integer.parseInt(postalCode.getText()),
+                            country.getText(),
+                            Integer.parseInt(phoneNum.getText()),
+                            Integer.parseInt(fax.getText())
+                    );
+                    sqlSession.insert("customer.insertCustomer",customer);
+                }
+
                 // close the session:
                 sqlSession.commit();
                 sqlSession.close();
@@ -75,7 +92,6 @@ public class EditCustomer extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Exit Window
-                System.out.println("Cancel Button Clicked");
                 DatagridCustomer cd = new DatagridCustomer();
                 cd.invoke();
                 setVisible(false);
@@ -113,7 +129,60 @@ public class EditCustomer extends JFrame{
         formPanel.add(new JPanel());
         formPanel.add(new JPanel());
         formPanel.add(new JPanel());
-        formPanel.add(updateButton);
+        formPanel.add(insertButton);
+        formPanel.add(cancelButton);
+        add(formPanel, BorderLayout.CENTER);
+        setSize(800, 400);
+        setLocation(500, 200);
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    public void invoke(Customer customer) {
+        updateCustomer = customer;
+        formPanel.setLayout(new GridLayout(7,4,0,6));
+        setTitle("Customer Form");
+        add(new JPanel(), BorderLayout.WEST);
+        add(new JPanel(), BorderLayout.EAST);
+        add(new JLabel(), BorderLayout.NORTH);
+        formPanel.add(labelCustomerID);
+        formPanel.add(customerID);
+        customerID.setEditable(false);
+        customerID.setText(customer.getCustomerID().toString());
+        formPanel.add(labelContactName);
+        formPanel.add(contactName);
+        contactName.setText(customer.getContactName());
+        formPanel.add(labelCompanyName);
+        formPanel.add(companyName);
+        companyName.setText(customer.getCompanyName());
+        formPanel.add(labelContactTitle);
+        formPanel.add(contactTitle);
+        contactTitle.setText(customer.getContactTitle());
+        formPanel.add(labelAddress);
+        formPanel.add(address);
+        address.setText(customer.getAddress());
+        formPanel.add(labelCity);
+        formPanel.add(city);
+        city.setText(customer.getCity());
+        formPanel.add(labelRegion);
+        formPanel.add(region);
+        region.setText(customer.getRegion());
+        formPanel.add(labelPostalCode);
+        formPanel.add(postalCode);
+        postalCode.setText(customer.getPostalCode().toString());
+        formPanel.add(labelCountry);
+        formPanel.add(country);
+        country.setText(customer.getCountry());
+        formPanel.add(labelPhoneNum);
+        formPanel.add(phoneNum);
+        phoneNum.setText(customer.getPhone().toString());
+        formPanel.add(labelFax);
+        formPanel.add(fax);
+        fax.setText(customer.getFax().toString());
+        formPanel.add(new JPanel());
+        formPanel.add(new JPanel());
+        formPanel.add(new JPanel());
+        formPanel.add(insertButton);
         formPanel.add(cancelButton);
         add(formPanel, BorderLayout.CENTER);
         setSize(800, 400);

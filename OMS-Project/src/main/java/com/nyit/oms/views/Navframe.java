@@ -12,12 +12,20 @@ public class Navframe extends JFrame {
     private JButton productButton;
     private JButton orderButton;
     private JPanel panel;
+    private JButton userButton;
 
     public Navframe() {
+        userButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CreateUser createUser = new CreateUser();
+                createUser.invoke();
+                setVisible(false);
+            }
+        });
         customerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //System.out.println("Customer");
                 DatagridCustomer dc = new DatagridCustomer();
                 dc.invoke();
                 setVisible(false);
@@ -26,7 +34,6 @@ public class Navframe extends JFrame {
         employeeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //System.out.println("Employee");
                 DatagridEmployee de = new DatagridEmployee();
                 de.invoke();
                 setVisible(false);
@@ -35,7 +42,6 @@ public class Navframe extends JFrame {
         supplierButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //System.out.println("Supplier");
                 DatagridSupplier ds = new DatagridSupplier();
                 ds.invoke();
                 setVisible(false);
@@ -44,7 +50,6 @@ public class Navframe extends JFrame {
         productButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //System.out.println("Product");
                 QueryProduct qp = new QueryProduct();
                 qp.invoke();
                 setVisible(false);
@@ -53,7 +58,6 @@ public class Navframe extends JFrame {
         orderButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //System.out.println("Order");
                 QueryOrder qo = new QueryOrder();
                 qo.invoke();
                 setVisible(false);
@@ -62,8 +66,16 @@ public class Navframe extends JFrame {
     }
 
     public void invoke() {
-        setTitle("welcome " + UserStatus.getUsername() + ", " + "You are " + UserStatus.getIsAdmin().toString() + " Admin");
-        setSize(200, 400);
+        if(UserStatus.getIsAdmin()){
+            setTitle("welcome " + UserStatus.getUsername() + ", " + "You are an Admin");
+        }else{
+            setTitle("welcome " + UserStatus.getUsername() + ", " + "You are an User");
+        }
+
+        if(!UserStatus.getIsAdmin()){
+            userButton.setVisible(false);
+        }
+        setSize(500, 400);
         setContentPane(panel);
         setLocation(500, 200);
         setVisible(true);

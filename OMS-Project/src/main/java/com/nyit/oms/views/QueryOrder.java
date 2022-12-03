@@ -18,19 +18,16 @@ public class QueryOrder extends JFrame {
     private JButton queryButton = new JButton("Query");
     private JButton backButton = new JButton("Back");
 
+    SqlSession sqlSession;
+    List<Order> orders;
     public QueryOrder() {
         queryButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Find all rows where OrderID === OrderID
                 int index = table.getSelectedRow();
-                System.out.println(index);
-                if (index == -1) return;
-
-                // Refresh
-                DatagridCustomer cd = new DatagridCustomer();
-                cd.invoke();
-                setVisible(false);
+                QueryWindow queryWindow = new QueryWindow();
+                queryWindow.invoke(Integer.parseInt(jtfSearch.getText()),"order");
             }
         });
         backButton.addActionListener(new ActionListener() {
@@ -45,8 +42,8 @@ public class QueryOrder extends JFrame {
 
     public void invoke() {
 
-        SqlSession sqlSession = SqlSessionUtil.openSession();
-        List<Order> orders = sqlSession.selectList("orders.selectAll", Order.class);
+        sqlSession = SqlSessionUtil.openSession();
+        orders = sqlSession.selectList("orders.selectAll", Order.class);
         String[][] data = new String[orders.size()][14];
         for(int i = 0; i < orders.size(); i++){
             data[i][0] = orders.get(i).getOrderID().toString();

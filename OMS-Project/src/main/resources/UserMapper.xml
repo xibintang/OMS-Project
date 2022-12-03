@@ -10,4 +10,18 @@
         select * from usertable where username = #{username} and userpassword = #{password}
     </select>
 
+    <insert id="insertUser">
+        insert into usertable values(null, #{username}, #{password}, #{isAdmin})
+    </insert>
+
+    <!--select all-->
+    <select id="selectAll" resultType="com.nyit.oms.views.UserObject">
+        select userid, username, userpassword as password, isAdmin from usertable;
+    </select>
+
+    <!--delete-->
+    <delete id="deleteUser">
+        delete from usertable where userid=#{userid}
+    </delete>
+
 </mapper>

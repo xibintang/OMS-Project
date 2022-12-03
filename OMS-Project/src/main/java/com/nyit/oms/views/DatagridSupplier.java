@@ -16,6 +16,7 @@ public class DatagridSupplier extends JFrame {
     private JScrollPane scrollPane;
     //private JButton updateButton = new JButton("Update");
     private JButton insertButton = new JButton("Insert");
+    private JButton updateButton = new JButton("Update");
     private JButton deleteButton = new JButton("Delete");
     private JButton backButton = new JButton("Back");
 
@@ -31,12 +32,23 @@ public class DatagridSupplier extends JFrame {
                 setVisible(false);
             }
         });
+
+        updateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int index = table.getSelectedRow();
+                if(index == -1) return;
+                EditSupplier es = new EditSupplier();
+                es.invoke(suppliers.get(index));
+                setVisible(false);
+            }
+        });
+
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Delete selected row
                 int index = table.getSelectedRow();
-                System.out.println(index);
                 if (index == -1) return;
                 // open session:
                 sqlSession = SqlSessionUtil.openSession();
@@ -109,6 +121,7 @@ public class DatagridSupplier extends JFrame {
         titlePanel.add(title);
         if (UserStatus.getIsAdmin()) {
             buttonPanel.add(insertButton);
+            buttonPanel.add(updateButton);
             buttonPanel.add(deleteButton);
         }
         buttonPanel.add(backButton);

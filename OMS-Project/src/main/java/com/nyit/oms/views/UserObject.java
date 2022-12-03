@@ -4,7 +4,7 @@ public class UserObject {
     private Integer userID;
     private String username;
     private String password;
-    private boolean isAdmin;
+    private Boolean isAdmin;
 
     public UserObject(String username, String password) {
         this.username = username;
@@ -15,7 +15,7 @@ public class UserObject {
         this.userID = userID;
     }
 
-    public int getUserID() {
+    public Integer getUserID() {
         return userID;
     }
 
@@ -39,7 +39,17 @@ public class UserObject {
         this.isAdmin = isAdmin;
     }
 
-    public boolean isAdmin() {
+    public Boolean isAdmin() {
         return isAdmin;
+    }
+
+    @Override
+    public String toString() {
+        return "UserObject{" +
+                "userID=" + userID +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", isAdmin=" + isAdmin +
+                '}';
     }
 }

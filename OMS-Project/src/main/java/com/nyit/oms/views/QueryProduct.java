@@ -29,13 +29,13 @@ public class QueryProduct extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // Find all rows where ProductID === ProductID
                 int index = table.getSelectedRow();
-                System.out.println(index);
-                if (index == -1) return;
+                QueryWindow queryWindow = new QueryWindow();
+                queryWindow.invoke(Integer.parseInt(jtfSearch.getText()),"product");
 
                 // Refresh
-                DatagridCustomer cd = new DatagridCustomer();
-                cd.invoke();
-                setVisible(false);
+                // DatagridCustomer cd = new DatagridCustomer();
+                // cd.invoke();
+                // setVisible(false);
             }
         });
         backButton.addActionListener(new ActionListener() {

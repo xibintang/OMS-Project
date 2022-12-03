@@ -23,29 +23,44 @@ public class EditEmployee extends JFrame{
     private JLabel labelContactTitle = new JLabel("Contact Title");
     private JLabel labelBirthDate = new JLabel("Birth Date");
     private JLabel labelHireDate = new JLabel("Hire Date");
-    private JButton updateButton = new JButton("Update");
+    private JButton insertButton = new JButton("Insert");
     private JButton cancelButton = new JButton("Cancel");
 
     private SqlSession sqlSession;
-    private List<Employee> employees;
+    private Employee employee;
 
     public EditEmployee() {
-        updateButton.addActionListener(new ActionListener() {
+        insertButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Open Sql Session:
                 sqlSession = SqlSessionUtil.openSession();
-                // Create an Employee Object:
-                Employee employee = new Employee(
-                        Integer.parseInt(employeeID.getText()),
-                        lastName.getText(),
-                        firstName.getText(),
-                        contactTitle.getText(),
-                        birthDate.getText(),
-                        hireDate.getText()
-                );
-                // Insert into the table:
-                sqlSession.insert("insertEmployee",employee);
+
+                if(employee != null){
+                    // a row is selected:
+                    Employee newEmployee = new Employee(
+                            Integer.parseInt(employeeID.getText()),
+                            lastName.getText(),
+                            firstName.getText(),
+                            contactTitle.getText(),
+                            birthDate.getText(),
+                            hireDate.getText()
+                    );
+                    sqlSession.insert("employees.updateByID",newEmployee);
+                }else{
+                    // Create an Employee Object:
+                    Employee newEmployee = new Employee(
+                            Integer.parseInt(employeeID.getText()),
+                            lastName.getText(),
+                            firstName.getText(),
+                            contactTitle.getText(),
+                            birthDate.getText(),
+                            hireDate.getText()
+                    );
+                    // Insert into the table:
+                    sqlSession.insert("insertEmployee",newEmployee);
+                }
+
                 // commit and close the session
                 sqlSession.commit();
                 sqlSession.close();
@@ -59,7 +74,6 @@ public class EditEmployee extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Exit Window
-                System.out.println("Cancel Button Clicked");
                 DatagridEmployee ed = new DatagridEmployee();
                 ed.invoke();
                 setVisible(false);
@@ -86,7 +100,44 @@ public class EditEmployee extends JFrame{
         formPanel.add(hireDate);
         formPanel.add(new JPanel());
         formPanel.add(new JPanel());
-        formPanel.add(updateButton);
+        formPanel.add(insertButton);
+        formPanel.add(cancelButton);
+        add(formPanel, BorderLayout.CENTER);
+        setSize(800, 400);
+        setLocation(500, 200);
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    public void invoke(Employee employee) {
+        this.employee = employee;
+        formPanel.setLayout(new GridLayout(8,2,0,6));
+        setTitle("Employee Form");
+        add(new JPanel(), BorderLayout.WEST);
+        add(new JPanel(), BorderLayout.EAST);
+        add(new JLabel(), BorderLayout.NORTH);
+        formPanel.add(labelEmployeeID);
+        formPanel.add(employeeID);
+        employeeID.setEditable(false);
+        employeeID.setText(employee.getEmployeeID().toString());
+        formPanel.add(labelLastName);
+        formPanel.add(lastName);
+        lastName.setText(employee.getLastName());
+        formPanel.add(labelFirstName);
+        formPanel.add(firstName);
+        firstName.setText(employee.getFirstName());
+        formPanel.add(labelContactTitle);
+        formPanel.add(contactTitle);
+        contactTitle.setText(employee.getTitle());
+        formPanel.add(labelBirthDate);
+        formPanel.add(birthDate);
+        birthDate.setText(employee.getBirthDate());
+        formPanel.add(labelHireDate);
+        formPanel.add(hireDate);
+        hireDate.setText(employee.getHireDate());
+        formPanel.add(new JPanel());
+        formPanel.add(new JPanel());
+        formPanel.add(insertButton);
         formPanel.add(cancelButton);
         add(formPanel, BorderLayout.CENTER);
         setSize(800, 400);

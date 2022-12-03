@@ -21,6 +21,8 @@ public class DatagridCustomer extends JFrame {
     private JButton deleteButton = new JButton("Delete");
     private JButton backButton = new JButton("Back");
 
+    private JButton updateButton = new JButton("Update");
+
     private List<Customer> customers;
     private SqlSession sqlSession;
 
@@ -35,12 +37,23 @@ public class DatagridCustomer extends JFrame {
                 setVisible(false);
             }
         });
+
+        updateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int index = table.getSelectedRow();
+                if(index == -1) return;
+                EditCustomer ec = new EditCustomer();
+                ec.invoke(customers.get(index));
+                setVisible(false);
+            }
+        });
+
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Delete selected row
                 int index = table.getSelectedRow();
-                System.out.println(index);
                 if (index == -1) return;
                 // index does not equal to -1, which means a column is selected:
                 sqlSession = SqlSessionUtil.openSession();
@@ -108,6 +121,7 @@ public class DatagridCustomer extends JFrame {
         titlePanel.add(title);
         if (/* user.isAdmin() */ UserStatus.getIsAdmin()) {
             buttonPanel.add(insertButton);
+            buttonPanel.add(updateButton);
             buttonPanel.add(deleteButton);
         }
         buttonPanel.add(backButton);

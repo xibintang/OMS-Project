@@ -35,33 +35,56 @@ public class EditSupplier extends JFrame{
     private JLabel labelPhoneNum = new JLabel("Phone Number");
     private JLabel labelFax = new JLabel("Fax");
     private JLabel labelHomepage = new JLabel("Homepage");
-    private JButton updateButton = new JButton("Update");
+    private JButton insertButton = new JButton("Insert");
     private JButton cancelButton = new JButton("Cancel");
 
+
     private SqlSession sqlSession;
-    private List<Supplier> suppliers;
+    private Supplier supplier;
 
     public EditSupplier() {
-        updateButton.addActionListener(new ActionListener() {
+        insertButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 sqlSession = SqlSessionUtil.openSession();
                 // insert:
-                Supplier supplier = new Supplier(
-                        Integer.parseInt(supplierID.getText()),
-                        companyName.getText(),
-                        contactName.getText(),
-                        contactTitle.getText(),
-                        address.getText(),
-                        city.getText(),
-                        region.getText(),
-                        Integer.parseInt(postalCode.getText()),
-                        country.getText(),
-                        Integer.parseInt(phoneNum.getText()),
-                        Integer.parseInt(fax.getText()),
-                        homepage.getText()
-                );
-                sqlSession.insert("suppliers.insertSuppliers",supplier);
+                if(supplier != null){
+                    // a row is selected:
+                    Supplier newSupplier = new Supplier(
+                            Integer.parseInt(supplierID.getText()),
+                            companyName.getText(),
+                            contactName.getText(),
+                            contactTitle.getText(),
+                            address.getText(),
+                            city.getText(),
+                            region.getText(),
+                            Integer.parseInt(postalCode.getText()),
+                            country.getText(),
+                            Integer.parseInt(phoneNum.getText()),
+                            Integer.parseInt(fax.getText()),
+                            homepage.getText()
+                    );
+                    sqlSession.insert("suppliers.updateByID",newSupplier);
+                }else{
+                    Supplier newSupplier = new Supplier(
+                            Integer.parseInt(supplierID.getText()),
+                            companyName.getText(),
+                            contactName.getText(),
+                            contactTitle.getText(),
+                            address.getText(),
+                            city.getText(),
+                            region.getText(),
+                            Integer.parseInt(postalCode.getText()),
+                            country.getText(),
+                            Integer.parseInt(phoneNum.getText()),
+                            Integer.parseInt(fax.getText()),
+                            homepage.getText()
+                    );
+                    sqlSession.insert("suppliers.insertSuppliers",newSupplier);
+                }
+
+
                 sqlSession.commit();
                 sqlSession.close();
 
@@ -74,7 +97,6 @@ public class EditSupplier extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Exit Window
-                System.out.println("Cancel Button Clicked");
                 DatagridSupplier ds = new DatagridSupplier();
                 ds.invoke();
                 setVisible(false);
@@ -113,7 +135,61 @@ public class EditSupplier extends JFrame{
         formPanel.add(homepage);
         formPanel.add(new JPanel());
         formPanel.add(new JPanel());
-        formPanel.add(updateButton);
+        formPanel.add(insertButton);
+        formPanel.add(cancelButton);
+        add(formPanel, BorderLayout.CENTER);
+        setSize(800, 500);
+        setLocation(500, 200);
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    public void invoke(Supplier supplier) {
+        this.supplier = supplier;
+        formPanel.setLayout(new GridLayout(14,4,0,6));
+        setTitle("Supplier Form");
+        add(new JPanel(), BorderLayout.WEST);
+        add(new JPanel(), BorderLayout.EAST);
+        add(new JLabel(), BorderLayout.NORTH);
+        formPanel.add(labelSupplierID);
+        formPanel.add(supplierID);
+        supplierID.setText(supplier.getSupplierID().toString());
+        formPanel.add(labelCompanyName);
+        formPanel.add(companyName);
+        companyName.setText(supplier.getCompanyName());
+        formPanel.add(labelContactName);
+        formPanel.add(contactName);
+        contactName.setText(supplier.getContactName());
+        formPanel.add(labelContactTitle);
+        formPanel.add(contactTitle);
+        contactTitle.setText(supplier.getContactTitle());
+        formPanel.add(labelAddress);
+        formPanel.add(address);
+        address.setText(supplier.getAddress());
+        formPanel.add(labelCity);
+        formPanel.add(city);
+        city.setText(supplier.getCity());
+        formPanel.add(labelRegion);
+        formPanel.add(region);
+        region.setText(supplier.getRegion());
+        formPanel.add(labelPostalCode);
+        formPanel.add(postalCode);
+        postalCode.setText(supplier.getPostalCode().toString());
+        formPanel.add(labelCountry);
+        formPanel.add(country);
+        country.setText(supplier.getCountry());
+        formPanel.add(labelPhoneNum);
+        formPanel.add(phoneNum);
+        phoneNum.setText(supplier.getPhone().toString());
+        formPanel.add(labelFax);
+        formPanel.add(fax);
+        fax.setText(supplier.getFax().toString());
+        formPanel.add(labelHomepage);
+        formPanel.add(homepage);
+        homepage.setText(supplier.getHomePage());
+        formPanel.add(new JPanel());
+        formPanel.add(new JPanel());
+        formPanel.add(insertButton);
         formPanel.add(cancelButton);
         add(formPanel, BorderLayout.CENTER);
         setSize(800, 500);

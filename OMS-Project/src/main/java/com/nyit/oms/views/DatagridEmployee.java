@@ -18,6 +18,7 @@ public class DatagridEmployee extends JFrame {
     private JButton insertButton = new JButton("Insert");
     private JButton deleteButton = new JButton("Delete");
     private JButton backButton = new JButton("Back");
+    private JButton updateButton = new JButton("Update");
 
     private SqlSession sqlSession;
     private List<Employee> employees;
@@ -31,13 +32,25 @@ public class DatagridEmployee extends JFrame {
                 setVisible(false);
             }
         });
+
+        updateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int index = table.getSelectedRow();
+                if(index == -1) return;
+                EditEmployee ee = new EditEmployee();
+                ee.invoke(employees.get(index));
+                setVisible(false);
+            }
+        });
+
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 sqlSession = SqlSessionUtil.openSession();
                 // Delete selected row
                 int index = table.getSelectedRow();
-                System.out.println(index);
+
                 if (index == -1) return;
                 // selected id:
                 Integer employeeID = employees.get(index).getEmployeeID();
@@ -96,6 +109,7 @@ public class DatagridEmployee extends JFrame {
         titlePanel.add(title);
         if (UserStatus.getIsAdmin()) {
             buttonPanel.add(insertButton);
+            buttonPanel.add(updateButton);
             buttonPanel.add(deleteButton);
         }
         buttonPanel.add(backButton);

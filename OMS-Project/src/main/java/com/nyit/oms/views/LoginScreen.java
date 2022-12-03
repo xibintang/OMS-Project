@@ -24,7 +24,7 @@ public class LoginScreen extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Check Username in Accounts table, then check if Password matches.
-                System.out.println("Handling actions...");
+                System.out.println("Logging in...");
                 //System.out.println("Username: " + jtfUsername.getText());
                 //System.out.println("Password: " + new String().valueOf(jpfPassword.getPassword()));
                 sqlSession = SqlSessionUtil.openSession();
@@ -33,9 +33,11 @@ public class LoginScreen extends JFrame {
                 if(result != null){
                     // this means the query returns a user, the username and password is valid:
                     if(result.isAdmin()){
+                        System.out.println("Login Success!");
                         UserStatus.setIsAdmin(true);
                         UserStatus.setUsername(result.getUsername());
                     }else{
+                        System.out.println("Login Success!");
                         UserStatus.setIsAdmin(false);
                         UserStatus.setUsername(result.getUsername());
                     }
@@ -43,6 +45,7 @@ public class LoginScreen extends JFrame {
                     nf.invoke();
                     setVisible(false);
                 }else{
+                    System.out.println("Login Fail!");
                     JOptionPane.showMessageDialog(null,"Username and Password does not match");
                 }
             }
