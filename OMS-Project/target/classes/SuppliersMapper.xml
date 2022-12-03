@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="suppliers">
+    <select id="selectAll" resultType="com.nyit.oms.pojo.Supplier">
+        select * from Suppliers
+    </select>
+
+    <insert id="insertSuppliers">
+        insert into
+            Suppliers(supplierID, companyName, contactTitle, address, city, region, postalCode, country, phone, fax, homePage )
+        values
+            (#{supplierID},#{companyName},#{contactTitle},#{address},#{city},#{region},#{postalCode},#{country},#{phone},#{fax},#{homePage})
+    </insert>
+
+    <update id="updateByID">
+        update Suppliers set
+            companyName=#{companyName},
+            contactTitle=#{contactTitle},
+            address=#{address},
+            city=#{city},
+            region=#{region},
+            postalCode=#{postalCode},
+            country=#{country},
+            phone=#{phone},
+            fax=#{fax},
+            homePage=#{homePage}
+        where
+            supplierID=#{supplierID}
+    </update>
+
+    <delete id="deleteByID">
+        delete from Suppliers
+        where
+            supplierID=#{supplierID}
+    </delete>
+</mapper>

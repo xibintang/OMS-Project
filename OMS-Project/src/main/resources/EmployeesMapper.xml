@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="employees">
+    <select id="selectAll" resultType="com.nyit.oms.pojo.Employee">
+        select * from Employees
+    </select>
+
+    <insert id="insertEmployee">
+        insert into
+            Employees(employeeID, lastName, firstName, title, birthDate, hireDate)
+        values
+            (#{employeeID},#{lastName},#{firstName},#{title},#{birthDate},#{hireDate})
+    </insert>
+
+    <update id="updateByID">
+        update Employees set
+            lastName=#{lastName}, firstName=#{firstName}, title=#{title}, birthDate=#{birthDate}, hireDate=#{hireDate}
+        where employeeID=#{employeeID}
+    </update>
+
+    <delete id="deleteByID">
+        delete from Employees where employeeID=#{employeeID}
+    </delete>
+</mapper>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="customer">
+
+    <select id="selectAll" resultType="com.nyit.oms.pojo.Customer">
+        select * from Customers
+    </select>
+
+    <select id="selectOne" resultType="com.nyit.oms.pojo.Customer">
+        select * from Customers where CustomerID=#{customerID}
+    </select>
+    <!--Example:-->
+    <insert id="insertCustomer">
+        insert into Customers
+            (CustomerID, CompanyName, ContactName, ContactTitle, Address, City, Region, PostalCode, Country, Phone, Fax)
+        values
+            (#{customerID}, #{companyName}, #{contactName}, #{contactTitle}, #{address}, #{city}, #{region}, #{postalCode}, #{country}, #{phone}, #{fax})
+
+    </insert>
+
+    <delete id="deleteByID">
+        <!--delete query goes here-->
+        <!--in delete, you need to invoke sqlSession.delete("id", parameter)-->
+        delete from Customers where customerID=#{customerID}
+    </delete>
+
+    <update id="updateByID">
+        update Customers set
+            companyName=#{companyName},
+            contactName=#{contactName},
+            contactTitle=#{contactTitle},
+            address=#{address},
+            city=#{city},
+            region=#{region},
+            postalCode=#{postalCode},
+            country=#{country},
+            phone=#{phone},
+            fax=#{fax}
+        where
+            customerID=#{customerID}
+    </update>
+
+
+</mapper>
